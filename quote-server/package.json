@@ -5,12 +5,16 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "node --no-warnings=ExperimentalWarning server.js"
+    "start": "node --no-warnings=ExperimentalWarning server.mjs",
+    "dev" : "node --watch --no-warnings=ExperimentalWarning server.mjs"
   },
   "license": "MIT",
   "keywords": [
     "node",
     "glitch",
     "express"
-  ]
+  ],
+  "dependencies": {
+    "express": "^4.19.1"
+  }
 }
