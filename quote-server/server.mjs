@@ -18,6 +18,17 @@ app.get("/quotes/random", (req, res) => {
   res.json(randomQuote);
 });
 
+// Route to search for a quote
+app.get("/quotes/search", (req, res) => {
+  const searchTerm = req.query.term.toLowerCase();
+  const searchResults = quotes.filter(
+    (quote) =>
+      quote.quote.toLowerCase().includes(searchTerm) ||
+      quote.author.toLowerCase().includes(searchTerm)
+  );
+  res.json(searchResults);
+});
+
 // Function to pick one element at random from an array
 const pickFromArray = (array) =>
   array[Math.floor(Math.random() * array.length)];
