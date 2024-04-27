@@ -1,32 +1,23 @@
-// server.js
-// This is where your node app starts
 
-//load the 'express' module which makes writing webservers easy
-import express from "express";
-//load the quotes JSON
-import quotes from "./quotes.json" assert { type: "json" };
+import express from 'express';
+import quotes from './quotes.json' assert { type: "json" }; // Assuming quotes.json is in the same directory
 
 const app = express();
-// Now register handlers for some routes:
-//   /                  - Return some helpful welcome info (text)
-//   /quotes            - Should return all quotes (json)
-//   /quotes/random     - Should return ONE quote (json)
-app.get("/", (request, response) => {
-  response.send("Neill's Quote Server!  Ask me for /quotes/random, or /quotes");
+const PORT = 3000;
+
+// Route to return all quotes
+app.get('/quotes', (req, res) => {
+  res.json(quotes);
 });
 
-//START OF YOUR CODE...
-
-//...END OF YOUR CODE
-
-//You can use this function to pick one element at random from a given array
-//example: pickFromArray([1,2,3,4]), or
-//example: pickFromArray(myContactsArray)
-//
-const pickFromArray = (arrayofQuotes) =>
-  arrayofQuotes[Math.floor(Math.random() * arrayofQuotes.length)];
-
-//Start our server so that it listens for HTTP requests!
-const listener = app.listen(3001, () => {
-  console.log("Your app is listening on port " + listener.address().port);
+// Route to return a random quote
+app.get('/quotes/random', (req, res) => {
+  const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+  res.json(randomQuote);
 });
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
+
