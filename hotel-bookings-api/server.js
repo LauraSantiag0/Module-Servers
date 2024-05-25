@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs/promises";
 import bookings from "./bookings.json" assert { type: "json" };
+import moment from "moment";
 
 // initialise the server
 const app = express();
@@ -30,6 +31,24 @@ app.get("/bookings", (request, response) => {
 });
 
 
+// GET /bookings/search
+app.get("/bookings/search", (request, response) => {
+  const { date } = request.query;
+  if (!date) {
+    return response.status(400).json({ error: "Date query parameter is required" });
+  }
+  const searchDate = moment(date, "YYYY-MM-DD");
+  if (!searchDate.isValid()) {
+    return response.status(400).json({ error: "Invalid date format. Use YYYY-MM-DD" });
+  }
+  const results = bookings.filter(booking => {
+    const checkInDate = moment(booking.checkInDate, "YYYY-MM-DD");
+    const checkOutDate = moment(booking.checkOutDate, "YYYY-MM-DD");
+    return searchDate.isBetween(checkInDate, checkOutDate, null, '[]');
+  });
+  response.json(results);
+});
+
 //To read one specific booking  by Id
 app.get("/bookings/:id", (request, response) => {
   const id = Number(request.params.id);
@@ -42,6 +61,10 @@ app.get("/bookings/:id", (request, response) => {
 });
 
 // POST /bookings
+
+
+
+
 
 
 
@@ -90,6 +113,7 @@ app.delete("/bookings/:id", async (request, response) => {
     response.status(500).json({ error: "Failed to delete booking" });
   }
 });
+
 
 
 
