@@ -48,15 +48,5 @@
     "roomId": 3,
     "checkInDate": "2017-08-30",
     "checkOutDate": "2017-10-02"
-  },
-  {
-    "id": 6,
-    "roomId": 8,
-    "title": "Queen",
-    "firstName": "Laura",
-    "surname": "Santiago",
-    "email": "eusoulaura8@gamil.com",
-    "checkInDate": "2024-06-03",
-    "checkOutDate": "2024-06-06"
   }
 ]
