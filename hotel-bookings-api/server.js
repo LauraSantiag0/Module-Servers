@@ -18,7 +18,10 @@ const saveBookings = async () => {
 const getNextId = () => {
   return bookings.length > 0 ? Math.max(...bookings.map(b => b.id)) + 1 : 1;
 };
-
+const validateBooking = (booking) => {
+  const requiredFields = ["roomId", "title", "firstName", "surname", "email", "checkInDate", "checkOutDate"];
+  return requiredFields.every(field => booking[field] && booking[field].toString().trim() !== "");
+};
 // Add other routes and logic as needed
 
 // GET /bookings
@@ -44,9 +47,9 @@ app.get("/bookings/:id", (request, response) => {
 
 app.post("/bookings", async (request, response) => {
   const { roomId, title, firstName, surname, email, checkInDate, checkOutDate } = request.body;
-  if (!roomId || !title || !firstName || !surname || !email || !checkInDate || !checkOutDate) {
-    return response.status(400).json({ error: "All fields except id are required" });
-  }
+ 
+
+  
   const newBooking = {
     id: getNextId(),
     roomId,
@@ -57,6 +60,11 @@ app.post("/bookings", async (request, response) => {
     checkInDate,
     checkOutDate
   };
+
+
+  if (!validateBooking(newBooking)) {
+    return response.status(400).json({ error: "All fields are required and must not be empty" });
+  }
   bookings.push(newBooking);
   try {
     await saveBookings();
@@ -70,7 +78,7 @@ app.post("/bookings", async (request, response) => {
 // DELETE /bookings/:id
 app.delete("/bookings/:id", async (request, response) => {
   const id = Number(request.params.id);
-  const index = bookings.findIndex(b => booking.id === id);
+  const index = bookings.findIndex(booking => booking.id === id);
   if (index === -1) {
     return response.status(404).json({ error: "Booking not found" });
   }
